@@ -13,9 +13,10 @@ from markdown import markdown
 from mptt.models import MPTTModel, TreeForeignKey
 
 from oneanddone.base.models import CreatedModifiedModel
+from oneanddone.base.models import OwnedModel
 
 
-class TaskArea(MPTTModel, CreatedModifiedModel):
+class TaskArea(MPTTModel, CreatedModifiedModel, OwnedModel):
     parent = TreeForeignKey('self', blank=True, null=True, related_name='children')
     name = models.CharField(max_length=255)
 
@@ -27,7 +28,7 @@ class TaskArea(MPTTModel, CreatedModifiedModel):
         return self.name
 
 
-class Task(CreatedModifiedModel):
+class Task(CreatedModifiedModel, OwnedModel):
     """
     Task for a user to attempt to fulfill. Tasks are categorized by area
     and include instructions and estimated execution times. Certain

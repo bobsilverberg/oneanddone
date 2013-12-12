@@ -7,7 +7,11 @@ from oneanddone.tasks.forms import TaskModelForm
 
 
 class TaskAreaAdmin(MPTTModelAdmin):
-    pass
+    exclude = ('owner',)
+
+    def save_model(self, request, obj, form, change):
+        obj.owner = request.user
+        obj.save()
 
 
 class TaskAdmin(admin.ModelAdmin):
@@ -34,6 +38,10 @@ class TaskAdmin(admin.ModelAdmin):
 
     def area_full_name(self, task):
         return task.area.full_name
+
+    def save_model(self, request, obj, form, change):
+        obj.owner = request.user
+        obj.save()
 
 
 class TaskAttemptAdmin(admin.ModelAdmin):
