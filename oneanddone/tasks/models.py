@@ -146,9 +146,9 @@ class TaskAttempt(CreatedModifiedModel):
 
 
 class Feedback(CreatedModifiedModel):
-    user = models.ForeignKey(User)
-    task = models.ForeignKey(Task)
+    attempt = models.ForeignKey(TaskAttempt)
     text = models.TextField()
 
     def __unicode__(self):
-        return u'Feedback: {user} for {task}'.format(user=self.user, task=self.task)
+        return u'Feedback: {user} for {task}'.format(
+            user=self.attempt.user, task=self.attempt.task)

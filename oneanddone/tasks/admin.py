@@ -42,9 +42,17 @@ class TaskAttemptAdmin(admin.ModelAdmin):
 
 
 class FeedbackAdmin(admin.ModelAdmin):
-    list_display = ('task', 'user')
+    list_display = ('task', 'user', 'state')
     search_fields = ('text',)
 
+    def task(self, feedback):
+        return feedback.attempt.task
+
+    def user(self, feedback):
+        return feedback.attempt.user
+
+    def state(self, feedback):
+        return feedback.attempt.state
 
 admin.site.register(models.TaskArea, TaskAreaAdmin)
 admin.site.register(models.Task, TaskAdmin)
