@@ -34,7 +34,7 @@ urlpatterns = patterns('',
 
     (r'^admin/', include(admin.site.urls)),
 
-    (r'^browserid/', include('django_browserid.urls')),
+    (r'', include('django_browserid.urls')),
 
     # Generate robots.txt
     (r'^robots\.txt$',
