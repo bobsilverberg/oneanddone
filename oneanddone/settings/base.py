@@ -225,3 +225,18 @@ INSTRUCTIONS_ALLOWED_ATTRIBUTES = {
 
 # Google Analytics ID
 GOOGLE_ANALYTICS_ID = ''
+
+LOGGING = {
+   'handlers': {
+       'console':{
+           'level': 'DEBUG',
+           'class': 'logging.StreamHandler'
+       },
+   },
+   'loggers': {
+       'django_browserid': {
+           'handlers': ['console'],
+           'level': 'DEBUG',
+       }
+   },
+}
