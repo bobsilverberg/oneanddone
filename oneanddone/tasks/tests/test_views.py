@@ -193,11 +193,10 @@ class CreateTaskViewTests(TestCase):
 
     def test_get_context_data_returns_add_action_and_url(self):
         """
-        The 'Add' action should be included in the context data.
+        The 'Add' action and correct cancel_url
+        should be included in the context data.
         """
-        get_object_patch = patch('oneanddone.tasks.views.generic.CreateView.get_object')
-        context_patch = patch('oneanddone.tasks.views.generic.CreateView.get_context_data')
-        with get_object_patch as get_object, context_patch as get_context_data:
+        with patch('oneanddone.tasks.views.generic.CreateView.get_context_data') as get_context_data:
             get_context_data.return_value = {}
             ctx = self.view.get_context_data()
             eq_(ctx['action'], 'Add')
@@ -210,7 +209,8 @@ class UpdateTaskViewTests(TestCase):
 
     def test_get_context_data_returns_update_action_and_url(self):
         """
-        The 'Update' action should be included in the context data.
+        The 'Update' action and correct cancel_url
+        should be included in the context data.
         """
         get_object_patch = patch('oneanddone.tasks.views.generic.UpdateView.get_object')
         context_patch = patch('oneanddone.tasks.views.generic.UpdateView.get_context_data')
