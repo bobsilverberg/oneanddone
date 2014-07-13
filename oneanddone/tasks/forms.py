@@ -54,7 +54,7 @@ class TaskForm(forms.ModelForm):
         fields = ('name', 'short_description', 'execution_time', 'difficulty',
                   'repeatable', 'team', 'project', 'type', 'start_date',
                   'end_date', 'why_this_matters', 'prerequisites', 'instructions',
-                  'is_draft')
+                  'is_draft', 'creator')
         widgets = {
             'name': forms.TextInput(attrs={'size': 100}),
             'short_description': forms.TextInput(attrs={'size': 100}),

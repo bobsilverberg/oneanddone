@@ -203,6 +203,7 @@ class UpdateTaskView(LoginRequiredMixin, MyStaffUserRequiredMixin, generic.Updat
         return ctx
 
     def form_valid(self, form):
+        # TODO: Here's where we can stop the creator from always being set to the current user
         form.save(self.request.user)
 
         messages.success(self.request, _('Your task has been updated.'))
