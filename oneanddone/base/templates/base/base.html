@@ -35,7 +35,7 @@
   <body class="{% block body_class %}sand{% endblock %}">
     {{ browserid_info() }}
     <div id="outer-wrapper">
-      <div id="wrapper">
+      <div id="wrapper"{% if wider_screen %} class="wider"{% endif %}>
         <header id="masthead">
           <a href="http://www.mozilla.org/" id="tabzilla">Mozilla</a>
           <nav id="nav-main" role="menubar">

@@ -398,3 +398,55 @@ section[class *="-section"] {
     }
 
 }
+
+/* Task activity listing */
+
+.activity-listing {
+    width: 100%;
+    margin-top: 5px;
+
+    .toggle {
+        padding-right: 40px;
+        background: url(/static/img/ui/item_closed.png) center no-repeat;
+
+        &.opened {
+            background-image: url(/static/img/ui/item_opened.png);
+        }
+    }
+
+}
+
+.activity-item {
+    vertical-align: top;
+}
+
+.task-activity-filter {
+  .span(6);
+}
+
+.filter-button {
+  clear: left;
+}
+
+div.filter-button {
+    margin-top: 5px;
+}
+
+.activty-detail {
+    position: relative;
+    background-color: #fff;
+    #gradient > .vertical(#EAEFF2; #D4DDE4);
+    padding: 4%;
+    .border-radius(.4rem);
+    .box-shadow(2px 2px 8px #999);
+    display: none;
+
+    .task-info {
+        vertical-align: top;
+    }
+
+    p {
+      margin-left: 5px;
+    }
+
+}

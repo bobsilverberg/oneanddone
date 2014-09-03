@@ -1,0 +1,95 @@
+// Adds sorting direction indicators to <a> elements.
+//
+// focus  - Display the direction to be sorted on-click.
+// .asc   - Icon indicates sort in ascending order.
+// .desc  - Icon indicates sort in descending order.
+.sortlink {
+  &:link, &:visited {
+    &:after {
+    }
+//      background-image: url('/static/img/ui/angle_up.png')
+//      display: inline-block
+//      content: " "
+//      margin-left: .4em
+//      background-image: none
+//      vertical-align: baseline
+//    }
+  }
+  &:focus, &:hover, &:active {
+    &:after {
+      opacity: 0.5;
+      background-image: url('/static/img/ui/angle_up.png')
+    }
+  }
+  &.asc {
+    &:link, &:visited {
+      &:after {
+        background-image: url('/static/img/ui/angle_up.png')
+      }
+    }
+    &:focus, &:hover, &:active {
+      &:after {
+        background-image: url('/static/img/ui/angle_down.png')
+      }
+    }
+  }
+  &.desc {
+    &:link, &:visited {
+      &:after {
+        background-image: url('/static/img/ui/angle_down.png')
+      }
+    }
+    &:focus, &:hover, &:active {
+      &:after {
+        background-image: url('/static/img/ui/angle_up.png')
+      }
+    }
+  }
+}
+
+.sortitem {
+  white-space: nowrap
+  text-transform: capitalize
+  letter-spacing: 0
+}
+
+/*
+// Create a list-ordering navigation bar.
+
+.sortitem
+  +columns(2,23)
+  +trailer(0)
+  +demi
+  +cond
+  white-space: nowrap
+  text-transform: capitalize
+  letter-spacing: 0
+
+.listordering
+  +text-shadow(rgba($blue-hint,$xsmall) 0 1px 0)
+  +h-borders(1px,.25)
+  +hpadding(.5em)
+  position: relative
+  background: rgba($blue,$xsmall)
+  border-color: rgba($blue-dark,$small)
+  ul
+    +pie-clearfix
+
+.bybulk-open
+  position: absolute
+  left: 0
+  width: auto
+  margin: 0
+  a
+    #{$link}
+      +opacity(.5)
+      +icon('ui/item_all_closed.png')
+      display: block
+    #{$focus}
+      +opacity(.75)
+    &.open
+      #{$link}
+        +opacity(1)
+        background-image: image-url('ui/item_all_open.png')
+
+*/

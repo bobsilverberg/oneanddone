@@ -2,6 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from datetime import timedelta
+import time
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -242,6 +243,19 @@ class TaskAttempt(CachedModel, CreatedModifiedModel):
     def __unicode__(self):
         return u'{user} attempt [{task}]'.format(user=self.user, task=self.task)
 
+    @property
+    def feedback_display(self):
+        try:
+            return self.feedback.text
+        except:
+            return 'No feedback found for this attempt'
+
+    @property
+    def attempt_length_in_minutes(self):
+        start_seconds = time.mktime(self.created.timetuple())
+        end_seconds = time.mktime(self.modified.timetuple())
+        return round((end_seconds - start_seconds) / 60, 1)
+
     class Meta(CreatedModifiedModel.Meta):
         ordering = ['-modified']
 
@@ -261,7 +275,7 @@ class TaskAttempt(CachedModel, CreatedModifiedModel):
 
 
 class Feedback(CachedModel, CreatedModifiedModel):
-    attempt = models.ForeignKey(TaskAttempt)
+    attempt = models.OneToOneField(TaskAttempt)
     text = models.TextField()
 
     def __unicode__(self):

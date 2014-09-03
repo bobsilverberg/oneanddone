@@ -1,0 +1,52 @@
+<table class="table activity-listing">
+  <thead>
+    <tr>
+      <th class="toggle"></th>
+      <th>Task</th>
+      <th>User</th>
+      <th>Status</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% if attempts %}
+      {% for attempt in attempts %}
+        <tr class="activity-item">
+          <td class="toggle"></td>
+          <td class="task-name"><a href="{{ attempt.task.get_absolute_url() }}">{{ attempt.task.name }}</a></td>
+          <td>{{ attempt.user }}</td>
+          <td>{{ attempt.get_state_display() }}</td>
+          <td>{{ attempt.attempt_length_in_minutes }}m</td>
+        </tr>
+        <tr class="activty-detail">
+          <td></td>
+          <td class="task-info">
+            <p>Owned by {{ attempt.task.creator }}</p>
+            <p>{{ attempt.task.team.name }}</p>
+          </td>
+          <td colspan="3">
+            {{ attempt.feedback_display }}
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr><td colspan="4">{{ _('Sorry no results found, try another search.') }}</td></tr>
+    {% endif %}
+  </tbody>
+</table>
+{% import 'base/pagination.html' as pagination %}
+{{ pagination.arrows(request, page_obj, paginator, is_paginated) }}
+<!--
+      <div class="row">
+        <div class="task-user">Owner</div>
+        <div class="task-team">Team</div>
+        <div class="task-feedback">Feedback</div>
+      </div>
+          <div class="row">
+{#            <div class="task-user">{{ attempt.task.creator }}</div>#}
+{#            <div class="task-team">{{ attempt.task.team.name }}</div>#}
+{#            <div class="task-feedback">{{ attempt.feedback_display }}</div>#}
+          </div>
+    </div>
+-->

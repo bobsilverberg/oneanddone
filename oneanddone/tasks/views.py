@@ -14,7 +14,7 @@ from rest_framework import generics
 from tower import ugettext as _
 
 from oneanddone.base.util import get_object_or_none
-from oneanddone.tasks.filters import TasksFilterSet
+from oneanddone.tasks.filters import TasksFilterSet, ActivityFilterSet
 from oneanddone.tasks.forms import FeedbackForm, TaskForm
 from oneanddone.tasks.mixins import APIRecordCreatorMixin, APIOnlyCreatorMayDeleteMixin
 from oneanddone.tasks.mixins import TaskMustBeAvailableMixin, HideNonRepeatableTaskMixin
@@ -169,6 +169,19 @@ class ListTasksView(LoginRequiredMixin, MyStaffUserRequiredMixin, FilterView):
     template_name = 'tasks/list.html'
     paginate_by = 20
     filterset_class = TasksFilterSet
+
+
+class ActivityView(LoginRequiredMixin, MyStaffUserRequiredMixin, FilterView):
+    queryset = TaskAttempt.objects.order_by('-modified')
+    context_object_name = 'attempts'
+    template_name = 'tasks/activity.html'
+    paginate_by = 20
+    filterset_class = ActivityFilterSet
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super(ActivityView, self).get_context_data(*args, **kwargs)
+        ctx['wider_screen'] = True
+        return ctx
 
 
 class CreateTaskView(LoginRequiredMixin, MyStaffUserRequiredMixin, generic.CreateView):
