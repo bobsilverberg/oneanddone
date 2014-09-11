@@ -26,50 +26,74 @@
 
   <form method="post" class="task-form">
     {{ csrf() }}
-    <div class="row">
-      <div>{{ form_field(form['name'], True) }}</div>
+    <div class="field required">
+      {{ form_field(form['name']) }}
     </div>
-    <div class="row">
-      <div>{{ form_field(form['short_description'], True) }}</div>
+    <div class="field required">
+      {{ form_field(form['short_description']) }}
     </div>
-    <div class="row">
-      <div class="one-field">{{ form_field(form['keywords']) }}</div>
+    <div class="field">
+      {{ form_field(form['keywords']) }}
     </div>
-    <div class="row">
-      <div class="three-fields">{{ form_field(form['execution_time']) }}</div>
-      <div class="three-fields">{{ form_field(form['difficulty']) }}</div>
-      <div class="three-fields">{{ form_field(form['priority']) }}</div>
+    <fieldset class="task-category first">
+      <div class="field required">
+        {{ form_field(form['team']) }}
+      </div>
+      <div class="field">
+        {{ form_field(form['project']) }}
+      </div>
+      <div class="field">
+        {{ form_field(form['type']) }}
+      </div>
+    </fieldset>
+    <fieldset class="task-info">
+      <div class="field">
+        {{ form_field(form['execution_time']) }}
+      </div>
+      <div class="field">
+        {{ form_field(form['difficulty']) }}
+      </div>
+      <div class="field">
+        {{ form_field(form['priority']) }}
+      </div>
+    </fieldset>
+    <fieldset class="task-dates">
+      <div class="field">
+        {{ form_field(form['start_date']) }}
+      </div>
+      <div class="field">
+        {{ form_field(form['end_date']) }}
+      </div>
+      <div class="field">
+        {{ form['repeatable'].errors }}
+        <label for="id_repeatable">
+          {{ form['repeatable'] }}
+          Repeatable
+        </label>
+      </div>
+      <div class="field">
+        {{ form['is_draft'].errors }}
+        <label for="id_is_draft">
+          {{ form['is_draft'] }}
+          Draft
+        </label>
+      </div>
+    </fieldset>
+    <div class="field why-this-matters">
+      {{ form_field(form['why_this_matters']) }}
     </div>
-    <div class="row">
-      <div class="three-fields">{{ form_field(form['team'], True) }}</div>
-      <div class="three-fields">{{ form_field(form['project']) }}</div>
-      <div class="three-fields">{{ form_field(form['type']) }}</div>
+    <div class="field">
+      {{ form_field(form['prerequisites']) }}
     </div>
-    <div class="row">
-      <div class="three-fields">{{ form_field(form['start_date']) }}</div>
-      <div class="three-fields">{{ form_field(form['end_date']) }}</div>
-      <div class="three-fields">{{ form_field(form['repeatable']) }}</div>
-    </div>
-    <div class="row">
-      <div class="one-field">{{ form_field(form['why_this_matters']) }}</div>
-    </div>
-    <div class="row">
-      <div class="one-field">{{ form_field(form['prerequisites']) }}</div>
-    </div>
-    <div class="row">
-      <div class="one-field">{{ form_field(form['instructions'], True) }}</div>
-    </div>
-    <div class="row">
-      <div class="one-field">{{ form_field(form['is_draft']) }}</div>
+    <div class="field required">
+      {{ form_field(form['instructions']) }}
     </div>
 
-    <div class="row">
-      <div class="actions-container">
-        <div class="without-message">
-          <a href="{{ cancel_url }}" class="button" id="cancel">{{ _('Cancel') }}</a>
-        </div>
-        <button type="submit" class="button">{{ _('{action} task')|f(action=action) }}</button>
+    <div class="actions-container">
+      <div class="without-message">
+        <a href="{{ cancel_url }}" class="button" id="cancel">{{ _('Cancel') }}</a>
       </div>
+      <button type="submit" class="button">{{ _('{action} task')|f(action=action) }}</button>
     </div>
   </form>
 </main>
