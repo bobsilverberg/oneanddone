@@ -1,11 +1,12 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import copy
 from datetime import datetime
 
 from django.utils import timezone
 
-from mock import patch
+from mock import Mock, patch
 from nose.tools import eq_, ok_
 
 from oneanddone.base.tests import TestCase
@@ -341,6 +342,59 @@ class TaskTests(TestCase):
                                        requires_notification=True).count(), 2)
         eq_(TaskAttempt.objects.filter(task=self.task_no_draft,
                                        state=TaskAttempt.STARTED).count(), 1)
+
+    def test_invalidate_tasks_equals_criterion(self):
+        """
+        The invalidate_tasks routine should invalidate tasks which match the
+        invalidation criteria.
+        This tests an equals criterion.
+        """
+        criterion = Mock(field_name='name', field_value='value')
+        criterion.get_relation_display.return_value = '=='
+        criteria = (criterion,)
+        task1 = Mock(is_invalid=False)
+        task1.batch.taskinvalidationcriterion_set.all.return_value = criteria
+        task1.imported_item.bugzilla_id = True
+        task2 = copy.deepcopy(task1)
+        task3 = copy.deepcopy(task1)
+        task3.imported_item.bugzilla_id = False
+        request_bug_patch = patch('oneanddone.tasks.models.BugzillaUtils.request_bug')
+        filter_patch = patch('oneanddone.tasks.models.Task.objects.filter')
+        with request_bug_patch as request_bug, filter_patch as filter:
+            filter.return_value = (task1, task2, task3)
+            request_bug.side_effect = lambda x: {True: {'name': 'value'}, False: {'name': 'not value'}}[x]
+            eq_(Task.invalidate_tasks(), 2)
+        eq_(task1.is_invalid, True)
+        eq_(task2.is_invalid, True)
+        eq_(task3.is_invalid, False)
+        task1.save.assert_called_with()
+        task2.save.assert_called_with()
+        ok_(not task3.save.called)
+
+    def test_invalidate_tasks_not_equals_criterion(self):
+        """
+        The invalidate_tasks routine should invalidate tasks which match the
+        invalidation criteria.
+        This tests a not equals criterion.
+        """
+        criterion = Mock(field_name='name', field_value='value')
+        criterion.get_relation_display.return_value = '!='
+        criteria = (criterion,)
+        task1 = Mock(is_invalid=False)
+        task1.batch.taskinvalidationcriterion_set.all.return_value = criteria
+        task1.imported_item.bugzilla_id = True
+        task2 = copy.deepcopy(task1)
+        task2.imported_item.bugzilla_id = False
+        request_bug_patch = patch('oneanddone.tasks.models.BugzillaUtils.request_bug')
+        filter_patch = patch('oneanddone.tasks.models.Task.objects.filter')
+        with request_bug_patch as request_bug, filter_patch as filter:
+            filter.return_value = (task1, task2)
+            request_bug.side_effect = lambda x: {True: {'name': 'value'}, False: {'name': 'not value'}}[x]
+            eq_(Task.invalidate_tasks(), 1)
+        eq_(task1.is_invalid, False)
+        eq_(task2.is_invalid, True)
+        ok_(not task1.save.called)
+        task2.save.assert_called_with()
 
     def test_save_closes_task_attempts(self):
         """

@@ -19,6 +19,7 @@ from markdown import markdown
 from tower import ugettext as _
 
 from oneanddone.base.models import CachedModel, CreatedByModel, CreatedModifiedModel
+from oneanddone.tasks.bugzilla_utils import BugzillaUtils
 
 
 class TaskInvalidationCriterion(CreatedModifiedModel, CreatedByModel):
@@ -255,6 +256,29 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
 
     def __unicode__(self):
         return self.name
+
+    @classmethod
+    def invalidate_tasks(self):
+        """
+        Invalidate any tasks for which invalidation criteria is met
+        """
+        bugzillabug_type = ContentType.objects.get(model="BugzillaBug")
+        tasks = self.objects.filter(
+            is_invalid=False,
+            content_type=bugzillabug_type)
+        invalidated = 0
+        for task in tasks:
+            bug = BugzillaUtils().request_bug(task.imported_item.bugzilla_id)
+            for criterion in task.batch.taskinvalidationcriterion_set.all():
+                sought_value = criterion.field_value.lower()
+                actual_value = bug[criterion.field_name.lower()].lower()
+                matches = sought_value == actual_value
+                if ((criterion.get_relation_display() == '==' and matches) or
+                        (criterion.get_relation_display() == '!=' and not matches)):
+                    task.is_invalid = True
+                    task.save()
+                    invalidated += 1
+        return invalidated
 
     @classmethod
     def is_available_filter(self, now=None, allow_expired=False, prefix=''):
