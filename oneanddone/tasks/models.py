@@ -45,6 +45,15 @@ class TaskInvalidationCriterion(CreatedModifiedModel, CreatedByModel):
                          self.choices[self.relation],
                          self.field_value])
 
+    def passes(self, bug):
+        sought_value = self.field_value.lower()
+        actual_value = bug[self.field_name.lower()].lower()
+        matches = sought_value == actual_value
+        if ((self.relation == self.EQUAL and matches) or
+                (self.relation == self.NOT_EQUAL and not matches)):
+            return True
+        return False
+
     field_name.help_text = """
         Name of field recognized by Bugzilla@Mozilla REST API. Examples:
         status, resolution, component.
@@ -198,6 +207,22 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
         return jinja2.Markup(cleaned_html)
 
     @property
+    def has_bugzilla_bug(self):
+        return isinstance(self.imported_item, BugzillaBug)
+
+    @property
+    def bugzilla_bug(self):
+        if self.has_bugzilla_bug:
+            return BugzillaUtils().request_bug(self.imported_item.bugzilla_id)
+        return None
+
+    @property
+    def invalidation_criteria(self):
+        if self.batch:
+            return self.batch.taskinvalidationcriterion_set.all()
+        return None
+
+    @property
     def keywords_list(self):
         return ', '.join([keyword.name for keyword in self.keyword_set.all()])
 
@@ -268,13 +293,9 @@ class Task(CachedModel, CreatedModifiedModel, CreatedByModel):
             content_type=bugzillabug_type)
         invalidated = 0
         for task in tasks:
-            bug = BugzillaUtils().request_bug(task.imported_item.bugzilla_id)
-            for criterion in task.batch.taskinvalidationcriterion_set.all():
-                sought_value = criterion.field_value.lower()
-                actual_value = bug[criterion.field_name.lower()].lower()
-                matches = sought_value == actual_value
-                if ((criterion.get_relation_display() == '==' and matches) or
-                        (criterion.get_relation_display() == '!=' and not matches)):
+            bug = task.bugzilla_bug
+            for criterion in task.invalidation_criteria:
+                if criterion.passes(bug):
                     task.is_invalid = True
                     task.save()
                     invalidated += 1
