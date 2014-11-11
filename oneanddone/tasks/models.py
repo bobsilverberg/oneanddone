@@ -213,6 +213,7 @@ class TaskMetrics(CreatedModifiedModel):
     user_completes_then_takes_another_count = models.IntegerField(null=True, blank=True)
     user_takes_then_quits_count = models.IntegerField(null=True, blank=True)
     too_short_completed_attempts_count = models.IntegerField(null=True, blank=True)
+    first_task_for_user_count = models.IntegerField(null=True, blank=True)
 
     @classmethod
     def get_medians(cls):
@@ -266,6 +267,7 @@ class TaskMetrics(CreatedModifiedModel):
             # take or complete another task
             completes_then_completes_users = set()
             completes_then_takes_users = set()
+            users_for_whom_this_is_first_complete_task = set()
             for attempt in task.completed_attempts:
                 if attempt.attempts_by_same_user.filter(
                         created__gt=attempt.modified).exists():
@@ -274,6 +276,11 @@ class TaskMetrics(CreatedModifiedModel):
                         state=TaskAttempt.FINISHED,
                         created__gt=attempt.modified).exists():
                     completes_then_completes_users.add(attempt.user)
+                if not attempt.attempts_by_same_user.filter(
+                        modified__lt=attempt.modified,
+                        state=TaskAttempt.FINISHED).exists():
+                    # This is the first completed attempt for this user
+                    users_for_whom_this_is_first_complete_task.add(attempt.user)
             # Count times that users took this task and then did not
             # go on to another task
             takes_then_leaves_users = set()
@@ -283,6 +290,7 @@ class TaskMetrics(CreatedModifiedModel):
                     takes_then_leaves_users.add(attempt.user)
             metrics.user_completes_then_completes_another_count = len(completes_then_completes_users)
             metrics.user_completes_then_takes_another_count = len(completes_then_takes_users)
+            metrics.first_task_for_user_count = len(users_for_whom_this_is_first_complete_task)
             metrics.user_takes_then_quits_count = len(takes_then_leaves_users)
             metrics.save()
         return len(tasks_to_update)
