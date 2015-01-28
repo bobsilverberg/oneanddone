@@ -356,8 +356,8 @@ class Task(CreatedModifiedModel, CreatedByModel):
         verbose_name='estimated time'
     )
     instructions = models.TextField()
-    is_draft = models.BooleanField(verbose_name='draft')
-    is_invalid = models.BooleanField(verbose_name='invalid')
+    is_draft = models.BooleanField(verbose_name='draft', default=False)
+    is_invalid = models.BooleanField(verbose_name='invalid', default=False)
     name = models.CharField(max_length=255, verbose_name='title', unique=True)
     prerequisites = models.TextField(blank=True)
     priority = models.IntegerField(
