@@ -66,7 +66,7 @@ class AvailableTasksView(TaskMustBeAvailableMixin, FilterView):
     template_name = 'tasks/list.html'
     paginate_by = 10
     filterset_class = TasksFilterSet
-    
+
     def get_context_data(self, *args, **kwargs):
         ctx = super(AvailableTasksView, self).get_context_data(*args, **kwargs)
         ctx['task_list_heading'] = _('Tasks')
@@ -93,14 +93,12 @@ class CreateFeedbackView(LoginRequiredMixin, PrivacyPolicyRequiredMixin,
         # Send email to task owner
         task_name = feedback.attempt.task.name
         subject = 'Feedback on %s from One and Done' % task_name
-        link_prefix = 'http'
+        task_link = 'http'
         if self.request.is_secure():
-            link_prefix += 's'
-        task_link = link_prefix + '://%s%s' % (
+            task_link += 's'
+        task_link += '://%s%s' % (
             self.request.get_host(),
             feedback.attempt.task.get_absolute_url())
-        feedback_link = link_prefix + '://%s/admin/tasks/feedback/%s' % (
-            self.request.get_host(), feedback.id)
         template = get_template('tasks/emails/feedback_email.txt')
 
         message = template.render({
@@ -108,8 +106,7 @@ class CreateFeedbackView(LoginRequiredMixin, PrivacyPolicyRequiredMixin,
             'task_name': task_name,
             'task_link': task_link,
             'task_state': feedback.attempt.get_state_display(),
-            'feedback': feedback.text,
-            'feedback_link': feedback_link})
+            'feedback': feedback.text})
 
         # Manually replace quotes and double-quotes as these get
         # escaped by the template and this makes the message look bad.

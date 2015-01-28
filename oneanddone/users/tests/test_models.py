@@ -119,7 +119,7 @@ class UserTests(TestCase):
         user = UserProfileFactory.create(username=None)
         profile_url = '/profile/%s/' % user.user.id
         eq_(user.profile_url, profile_url)
-     
+
     def test_unicode(self):
         """
         The string representation of a user should include their

@@ -499,9 +499,6 @@ class TaskMetricsSupportTests(TestCase):
     def test_all_attempts(self):
         eq_(len(self.task1.all_attempts), 11)
 
-    def test_incomplete_attempts(self):
-        eq_(len(self.task1.closed_attempts), 3)
-
     def test_closed_user_count(self):
         eq_(self.task1.closed_user_count, 2)
 
