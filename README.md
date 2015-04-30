@@ -1,7 +1,7 @@
 oneanddone
 ==========
 
-One and Done is written with [Playdoh][playdoh] and [Django][django].
+One and Done is written with [Django][django].
 
 If you're interested in helping us out, please read through the
 [project wiki][wiki] and reach out to us!
@@ -17,7 +17,6 @@ About the project:
 >websites, Services, or Thunderbird.
 
 [django]: http://www.djangoproject.com/
-[playdoh]: https://github.com/mozilla/playdoh
 [wiki]: https://wiki.mozilla.org/QA/OneandDone
 [persona]: https://developer.mozilla.org/Persona/The_implementor_s_guide/Testing
 [django-browserid]: https://github.com/mozilla/django-browserid
@@ -32,7 +31,7 @@ you don't have `pip` installed, you can install it with `easy_install pip`.
 1. Start by getting the source:
 
    ```sh
-   $ git clone --recursive git@github.com:mozilla/oneanddone.git
+   $ git clone git@github.com:mozilla/oneanddone.git
    $ cd oneanddone
    ```
    Note you may want to fork and clone the repo as described in the
@@ -69,12 +68,11 @@ you don't have `pip` installed, you can install it with `easy_install pip`.
       * Use the Django admin section of your local One and Done instance by going to the `/admin` URL -- this also relies on an admin account. You can define Task Teams here, for example.
       * Use an external tool like MySQL Workbench.
       * Ask another active developer for a mysqldump of their local database.
-5. Install the compiled and development requirements:
+5. Install the requirements:
    ```sh
-   $ pip install -r requirements/compiled.txt
-   $ pip install -r requirements/dev.txt
+   $ ./bin/peep.py install -r requirements/requirements.txt
    ```
-   _Note_: On OS X (in particular 10.8.5, Xcode 5.1), you may encounter the following error: `clang: error: unknown argument. '-mno-fused-madd'`. Try running pip with the `ARCHFLAGS` environment variable set, as follows: `ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future pip install -r requirements/compiled.txt` 
+   _Note_: On OS X (in particular 10.8.5, Xcode 5.1), you may encounter the following error: `clang: error: unknown argument. '-mno-fused-madd'`. Try running peep with the `ARCHFLAGS` environment variable set, as follows: `ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future ./bin/peep.py install -r requirements/requirements.txt` 
 
 6. Configure your local settings by copying `oneanddone/settings/local.py-dist` to
    `oneanddone/settings/local.py` and customizing the settings in it:
@@ -84,11 +82,10 @@ you don't have `pip` installed, you can install it with `easy_install pip`.
    ```
 
    The file is commented to explain what each setting does and how to customize
-   them. Here are some highlights:
+   them. By default you should only need to customize the following setting:
    * If you are running this locally and not over HTTPS, uncomment `SESSION_COOKIE_SECURE = False`
-   * The `HMAC_KEYS` dictionary should not be empty. 
-   * Provide a value for `SECRET_KEY`.
-
+    
+7. Configure your environment by copying `.env-dist` to `.env` and customizing the values in it. The current values should work by default.
 
 7. Initialize your database structure:
    ```sh
@@ -110,7 +107,7 @@ This means that you must also run `./manage.py migrate [model]` for each model t
 Users
 -----
 
-Playdoh uses [BrowserID][django-browserid], a.k.a. Mozilla Persona, for user authentication. To add users to your local database, simply sign into your local One and Done instance. You may want to use dummy email accounts as described in Mozilla's guide to [testing Persona][persona].
+One and Done uses [BrowserID][django-browserid], a.k.a. Mozilla Persona, for user authentication. To add users to your local database, simply sign into your local One and Done instance. You may want to use dummy email accounts as described in Mozilla's guide to [testing Persona][persona].
 
 You need at least one superuser to be able to develop and test administrative features of the project. You can create as many superusers as you like with `python manage.py createsuperuser`. After that, sign into your local One and Done instance with the superuser's email address as usual. 
 
@@ -118,11 +115,11 @@ You need at least one superuser to be able to develop and test administrative fe
 Applying Migrations
 -------------------
 
-We're using [South][south] to handle database migrations. To apply the migrations,
+We're using built in [Django][django] database migrations. To apply the migrations,
 run the following:
 
    ```sh
-   $ ./manage.py migrate oneanddone.tasks && ./manage.py migrate oneanddone.users
+   $ ./manage.py migrate
    ```
 
 If you make changes to an existing model, say `oneanddone.tasks`, you will need to regeneratre the schema migration as follows:
