@@ -26,9 +26,9 @@ django-csp==2.0.3
 # sha256: ygF2j97N4TQwHzFwdDIm9g7f9cOTXxJDc3jr2RFQY1M
 dj-database-url==0.3.0
 
-# sha256: pW8UU2y7fX5GbSmQsXL2gaBdfpRNAoEazBHazqu8yzw
-# sha256: GnvU61NePCzyYdlVhUvc9L8HyOpXWSgBJz0BMujbAEc
-django-filter==0.9.1
+# sha256: fRdUe2UhbMXG-8BK7lUIjM1ZF8B3UwTZb3AXwmx4nNc
+# sha256: AMxHk1r7vYMmD90oOwqnkOZY0qcZIgSfbkZ9yooSRTc
+django-filter==0.11.0
 
 # sha256: b0wujFraFwOf8cHji8Ub6pMXrzZ24oRmFIyN9fx48TI
 django-jinja==1.4.1
