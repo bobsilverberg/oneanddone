@@ -78,9 +78,6 @@ ipdb==0.8.1
 # sha256: MfXU5lrA5yp-r8Mey5WrfJgbtJ7TFLaTEbykXGq4-ss
 ipython==3.2.0
 
-# sha256: xJWo39CpwdPY7QISG7sotsnTTU2jCqk6fmOcDz17Bjk
-jingo==0.7.1
-
 # sha256: LiSsXQBNtXFJdqBKwOgMbfbkfpjDVMssDYL4h51Pj9s
 Jinja2==2.7.3
 
@@ -202,14 +199,6 @@ https://github.com/jsocol/commonware/archive/b5544185b2d24adc1eb512735990752400c
 # django-multidb-router
 # sha256: chnrGa1bo7O6z0ZexwrpRd_HdMsTOALQoGH9nlB9dX4
 https://github.com/jbalogh/django-multidb-router/archive/f6ff9379eef9dceffbb7bfdf0cb6aa4eef7549a1.zip#egg=django-multidb-router
-
-# django-mozilla-product-details
-# sha256: CjPtzXJMot4J4bM5LQRovBDDJbtEKG68S07AhCek_DY
-https://github.com/mozilla/django-mozilla-product-details/archive/d168ab2e689a1b54a30a923386fe7948a74ff334.zip#egg=django-mozilla-product-details
-
-# jingo-minify
-# sha256: 1rhJV1lByVPZ-yeMIc8aLkpmilR1XeBa0DUAiHGrt1c
-https://github.com/jsocol/jingo-minify/archive/2beb546949ed2cb4eb866bab6dd643047d803a95.zip#egg=jingo-minify
 
 # test-utils
 # sha256: ih29HHrehSBq53DJzl9DCBoJjJX5lK8RP2Q06QBVmmc
