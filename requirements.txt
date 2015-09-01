@@ -16,8 +16,8 @@ django-bmemcached==0.2.2
 # sha256: U2oNq2KzDFQWWxkblbx6hL5b-QH3tD-fv1ZVrS_PSp4
 django-braces==1.4.0
 
-# sha256: EXGi39Bz0MuXOkgtic_AweW52n1VHcCgAkEoZ-z1KT4
-django-browserid==0.11.1
+# sha256: -jPrQhcqGbcVrbp6ZJcJEftdj9G2nPjaepXyvH8PMDs
+django-browserid==1.0.0
 
 # sha256: 0yV2uq13_dnmhZvpfCtqPBem9IQ2Q4nbcx8Gl7ehlmE
 django-csp==2.0.3
@@ -36,6 +36,10 @@ django-jinja==1.4.1
 # sha256: c2rlPj7EfbuzBJmZwYzlRYWvKZ74gXLZony1_aKdqgA
 # sha256: gPnTaQ4NuDDDdq6XFygUjXYN1k1ETRwJJ0fWY6DXL3M
 django-nose==1.4.2
+
+# sha256: xxHohhXvN7I1nOMJeOrnxl5UkkrrBDIpZWxeI5Bl5ZY
+# sha256: pakJ9APQ6lbyEWGJSf9ON48W5amWvegZvStbDnqbuP4
+django-pipeline==1.5.4
 
 # sha256: RORjnsBXprap3duGnU46SBj8knjsSQzOOa7whEBZKpM
 django-session-csrf==0.5
