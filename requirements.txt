@@ -2,6 +2,9 @@
 # sha256: f7bVDv_oigh_6yA2y5cv16iTvzODYVFvGlWoIL97Ukg
 Babel==2.1.1
 
+# sha256: p7AqX3bYmnn4YZJvs04CnMQ0PBOAJSXIGFQqOf54jM4
+commonware==0.4.3
+
 # sha256: ZExcwtBko41DlidUnmOCqLwouAokP-XLukCx79K6ves
 # sha256: LRdOSj9UcI0NW2_xv1SucWUug7sG11drOyDZFrKcNlM
 Django==1.8.5
@@ -196,17 +199,9 @@ whitenoise==2.0.2
 # sha256: ZSZiwhMQgfaHTTuNJA1bLSjZTu4lsLH0hLSl4nT3xF4
 https://github.com/jsocol/bleach/archive/4e425f767bbf4cc96beafbcb5536aa93cc15a680.zip#egg=bleach
 
-# commonware
-# sha256: o2HP2_WwSljbspF8fp7FRyWPZqltTE5THiIoh7GFuxE
-https://github.com/jsocol/commonware/archive/b5544185b2d24adc1eb512735990752400ce9cbd.zip#egg=commonware
-
-# django-multidb-router
-# sha256: chnrGa1bo7O6z0ZexwrpRd_HdMsTOALQoGH9nlB9dX4
-https://github.com/jbalogh/django-multidb-router/archive/f6ff9379eef9dceffbb7bfdf0cb6aa4eef7549a1.zip#egg=django-multidb-router
-
 # test-utils
 # sha256: ih29HHrehSBq53DJzl9DCBoJjJX5lK8RP2Q06QBVmmc
-https://github.com/jbalogh/test-utils/archive/e42e031d31ea63d593e47d564545149a0f30b95f.zip#egg=test-utils
+https://github.com/jbalogh/test-utils/archive/e42e031.zip#egg=test-utils
 
 # tower
 # sha256: YGxwkMz10Xa-hQf4ePwx4s2rJcoL70yhD6M4TOEZgjE
