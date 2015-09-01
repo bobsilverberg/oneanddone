@@ -5,8 +5,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from oneanddone.base.monkeypatches import patch
-patch()
 
 # Auto-discover admin interface definitions.
 admin.autodiscover()
