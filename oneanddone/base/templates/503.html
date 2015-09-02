@@ -1,0 +1,13 @@
+{# This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/. #}
+{% extends 'base/base.html' %}
+
+{% set title = _('Maintenance Mode') %}
+
+{% block content %}
+  <main class="billboard content-container">
+    <h2>{{ _('Sorry, One and Done is currently unavailable due to site maintenance.') }}</h2>
+    <p>{{ _('Please try again later.') }}</p>
+  </main>
+{% endblock %}

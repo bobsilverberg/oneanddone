@@ -38,7 +38,8 @@
       <div id="wrapper">
         <header id="masthead">
           <a href="http://www.mozilla.org/" id="tabzilla">Mozilla</a>
-          <nav id="nav-main" role="menubar" class="drop-down">
+          {% if not settings.MAINTENANCE_MODE %}
+            <nav id="nav-main" role="menubar" class="drop-down">
             <span class="toggle" role="button" aria-controls="nav-main-menu" tabindex="0">{{ _('Menu') }}</span>
             <ul role="menu" id="nav-main-menu">
               <li role="menuitem">
@@ -80,6 +81,7 @@
               </li>
             </ul>
           </nav>
+          {% endif %}
           <h2>
             <a href="{{ url('base.home') }}" id="logo-container" title="{{ _('Home') }}">
               <img src="{{ static('img/qa-logo-header.png') }}" width="45" height="45" alt="{{ _('Mozilla QA logo') }}" class="logo">

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django_browserid',
     'django_nose',
     'jingo_minify',
+    'maintenancemode',
     'product_details',
     'rest_framework',
     'rest_framework.authtoken',
@@ -70,6 +71,7 @@ MIDDLEWARE_CLASSES = (
     'session_csrf.CsrfMiddleware',  # Must be after auth middleware.
     'django.contrib.messages.middleware.MessageMiddleware',
     'commonware.middleware.FrameOptionsHeader',
+    'maintenancemode.middleware.MaintenanceModeMiddleware',
     'oneanddone.base.middleware.TimezoneMiddleware',
     'oneanddone.base.middleware.ClosedTaskNotificationMiddleware',
 )
@@ -134,6 +136,8 @@ DEV = config('DEV', default=DEBUG, cast=bool)
 TEMPLATE_DEBUG = config('DEBUG', default=DEBUG, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
+
+MAINTENANCE_MODE = config('DJANGO_MAINTENANCE_MODE', default=False, cast=bool)
 
 ROOT_URLCONF = 'oneanddone.urls'
 
