@@ -73,7 +73,6 @@ INSTALLED_APPS = [
     'django_jinja',
     'django_jinja.contrib._humanize',  # Adds django humanize filters
     'django_nose',
-    'jingo_minify',
     'rest_framework',
     'rest_framework.authtoken',
     'tower',
@@ -291,42 +290,6 @@ SESSION_COOKIE_SECURE = not DEBUG
 # Third-party Library Settings
 ##############################################################################
 
-
-# Bundles is a dictionary of two dictionaries, css and js, which list css files
-# and js files that can be bundled together by the minify app.
-MINIFY_BUNDLES = {
-    'css': {
-        'base': (
-            'browserid/persona-buttons.css',
-            'css/sandstone/sandstone-resp.less',
-            'css/one-and-done.less',
-            'css/slider.css',
-            'css/smoothness/jquery-ui-1.10.4.custom.css',
-            'css/datatables/jquery.dataTables.css'
-        ),
-    },
-    'js': {
-        'base': (
-            'js/libs/jquery-2.0.3.min.js',
-            'browserid/api.js',
-            'browserid/browserid.js',
-            'js/site.js',
-            'js/slider.js',
-            'js/libs/jquery-ui-1.10.4.custom.js',
-            'js/libs/jquery.dataTables.js'
-        ),
-    }
-}
-
-# Use staticfiles loaders for finding resources for minification.
-JINGO_MINIFY_USE_STATIC = True
-
-# Path to Java. Used for compress_assets.
-JAVA_BIN = '/usr/bin/java'
-
-# Do not preprocess LESS files.
-LESS_PREPROCESS = False
-LESS_BIN = config('LESSC_BIN', default='lessc')
 
 # Testing configuration.
 NOSE_ARGS = ['--logging-clear-handlers', '--logging-filter=-factory,-south,-django.db']

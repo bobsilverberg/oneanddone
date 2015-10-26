@@ -199,14 +199,6 @@ whitenoise==2.0.2
 # sha256: ZSZiwhMQgfaHTTuNJA1bLSjZTu4lsLH0hLSl4nT3xF4
 https://github.com/jsocol/bleach/archive/4e425f767bbf4cc96beafbcb5536aa93cc15a680.zip#egg=bleach
 
-# jingo-minify
-# sha256: 1rhJV1lByVPZ-yeMIc8aLkpmilR1XeBa0DUAiHGrt1c
-https://github.com/jsocol/jingo-minify/archive/2beb546949ed2cb4eb866bab6dd643047d803a95.zip#egg=jingo-minify
-
-# test-utils
-# sha256: ih29HHrehSBq53DJzl9DCBoJjJX5lK8RP2Q06QBVmmc
-https://github.com/jbalogh/test-utils/archive/e42e031.zip#egg=test-utils
-
 # tower
 # sha256: YGxwkMz10Xa-hQf4ePwx4s2rJcoL70yhD6M4TOEZgjE
 https://github.com/clouserw/tower/archive/1df74f9c7c353b9fc76d28a50f511ad452093340.zip#egg=tower
