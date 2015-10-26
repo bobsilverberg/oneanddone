@@ -8,12 +8,12 @@ import urlparse
 from django.contrib.humanize.templatetags import humanize
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.urlresolvers import reverse
-# from django.utils import six
+from django.utils import six
 from django.utils.encoding import smart_str
-# try:
-#     from django.utils.encoding import smart_unicode as smart_text
-# except ImportError:
-#     from django.utils.encoding import smart_text
+try:
+    from django.utils.encoding import smart_unicode as smart_text
+except ImportError:
+    from django.utils.encoding import smart_text
 
 import jinja2
 from jingo_minify.helpers import css, get_css_urls
@@ -35,14 +35,19 @@ from django_jinja import library
 #     return jinja2.Markup('\n'.join([link_tag.format(url) for url in urls]))
 #
 #
+
 @library.filter
 def fe(s, *args, **kwargs):
-    """Format a safe string with potentially unsafe arguments, then return a
-    safe string."""
-    s = six.text_type(s)
+    """Format a safe string with potentially unsafe arguments
+
+    :returns: safe string
+
+    """
     args = [jinja2.escape(smart_text(v)) for v in args]
+
     for k in kwargs:
         kwargs[k] = jinja2.escape(smart_text(kwargs[k]))
+
     return jinja2.Markup(s.format(*args, **kwargs))
 
 
