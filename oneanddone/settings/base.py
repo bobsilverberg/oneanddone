@@ -158,10 +158,10 @@ TEMPLATES = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
     'django_browserid.auth.BrowserIDBackend',
     'django.contrib.auth.backends.ModelBackend',
-)
+]
 
 # Sessions
 #
