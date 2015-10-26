@@ -4,7 +4,7 @@
 
 <form method="post" class="feedback-form">
   <input type="hidden" id="pk" name="pk" value="{{ taskattempt.id }}">
-  {{ csrf() }}
+  {% csrf_token %}
   <p>
     {{ form.content }}
     {{ form.content.errors }}
