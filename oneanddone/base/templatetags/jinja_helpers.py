@@ -4,6 +4,7 @@ import re
 import urllib
 import urlparse
 
+from django.conf import settings
 from django.contrib.humanize.templatetags import humanize
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.urlresolvers import reverse
@@ -15,7 +16,23 @@ except ImportError:
     from django.utils.encoding import smart_text
 
 import jinja2
+from jingo_minify.helpers import css, get_css_urls
 from django_jinja import library
+
+
+@library.global_function
+def less_css(bundle):
+    """
+    Similar to jingo_minify's css helper, but uses rel="stylesheet/less"
+    instead of rel="stylesheet" when TEMPLATE_DEBUG is True. If
+    TEMPLATE_DEBUG is False, this passes the call on to the css helper.
+    """
+    if not settings.TEMPLATE_DEBUG:
+        return css(bundle)
+
+    urls = get_css_urls(bundle)
+    link_tag = '<link rel="stylesheet/less" media="screen,projection,tv" href="{0}" />'
+    return jinja2.Markup('\n'.join([link_tag.format(url) for url in urls]))
 
 
 @library.filter
