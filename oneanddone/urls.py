@@ -5,6 +5,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from oneanddone.base.monkeypatches import patch
+patch()
 
 # Auto-discover admin interface definitions.
 admin.autodiscover()
@@ -30,8 +32,7 @@ urlpatterns = patterns(
     (r'^robots\.txt$',
         lambda r: HttpResponse(
             'User-agent: *\n{0}: /'.format('Allow' if settings.ENGAGE_ROBOTS else 'Disallow'),
-            content_type='text/plain'
-        )),
+            content_type='text/plain')),
 
     (r'', include('django_browserid.urls')),
 

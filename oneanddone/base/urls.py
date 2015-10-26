@@ -10,6 +10,6 @@ from oneanddone.base import views
 urlpatterns = patterns(
     '',
     (r'^(?P<path>contribute\.json)$', 'django.views.static.serve',
-     {'document_root': settings.ROOT}),
+     {'document_root': settings.BASE_DIR}),
     url(r'^$', views.HomeView.as_view(), name='base.home'),
 )

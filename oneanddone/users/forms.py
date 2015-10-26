@@ -20,11 +20,10 @@ class SignUpForm(forms.ModelForm):
         max_length=30, regex=r'^[a-zA-Z0-9]+$',
         error_messages={'invalid': _("This value may contain only alphanumeric characters.")})
     personal_url = MyURLField(label=_('Personal URL:'))
-    bugzilla_email = forms.EmailField(label=_('Bugzilla email address:'), required=False)
 
     class Meta:
         model = UserProfile
-        fields = ('name', 'username', 'pp_checkbox', 'personal_url', 'bugzilla_email')
+        fields = ('name', 'username', 'pp_checkbox', 'personal_url')
 
     def save(self, *args, **kwargs):
         # We will only reach the save() method if the pp_checkbox was checked
@@ -39,8 +38,7 @@ class UserProfileForm(forms.ModelForm):
         error_messages={'invalid': _("This value may contain only alphanumeric characters.")})
     consent_to_email = forms.BooleanField(required=False)
     personal_url = MyURLField(label=_('Personal URL:'))
-    bugzilla_email = forms.EmailField(label=_('Bugzilla email address:'), required=False)
 
     class Meta:
         model = UserProfile
-        fields = ('name', 'username', 'consent_to_email', 'personal_url', 'bugzilla_email')
+        fields = ('name', 'username', 'consent_to_email', 'personal_url')

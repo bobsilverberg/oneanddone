@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'django_ace',
     'django_browserid',
     'django_jinja',
+    'django_jinja.contrib._humanize',  # Adds django humanize filters
     'django_nose',
     'pipeline',
     'rest_framework',
@@ -116,11 +117,17 @@ CONTEXT_PROCESSORS = (
 TEMPLATES = [
     {
         'BACKEND': 'django_jinja.backend.Jinja2',
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
+            # Use jinja2/ for jinja templates
+            'app_dirname': 'jinja2',
+            # Don't figure out which template loader to use based on
+            # file extension
             'match_extension': '',
-            'match_regex': r'^(?!(admin|registration)/).*\.(html|jinja)$',
+            'newstyle_gettext': True,
             'context_processors': CONTEXT_PROCESSORS,
+            'undefined': 'jinja2.Undefined',
             'extensions': [
                 'jinja2.ext.do',
                 'jinja2.ext.loopcontrols',
@@ -137,6 +144,8 @@ TEMPLATES = [
             ],
             'globals': {
                 'browserid_info': 'django_browserid.helpers.browserid_info',
+                'browserid_login': 'django_browserid.helpers.browserid_login',
+                'browserid_logout': 'django_browserid.helpers.browserid_logout'
             }
         }
     },

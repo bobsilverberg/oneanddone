@@ -1,7 +1,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
@@ -162,7 +161,8 @@ class ImportTasksView(LoginRequiredMixin, MyStaffUserRequiredMixin, generic.Temp
 
         # Create a hidden form for each possible PreviewConfirmationForm stage.
         # These forms are used to signal what the next stage should be.
-        make_stage = lambda x: PreviewConfirmationForm(data={'stage': x})
+        def make_stage(stage):
+            return PreviewConfirmationForm(data={'stage': stage})
         stages = PreviewConfirmationForm.submission_stages
         forms.update({'stage_form__' + s: make_stage(s) for s in stages})
         return forms
