@@ -36,8 +36,6 @@ DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
 DEV = config('DEV', default=DEBUG, cast=bool)
 
-TEMPLATE_DEBUG = config('DEBUG', default=DEBUG, cast=bool)
-
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 
 HMAC_KEYS = {
@@ -160,7 +158,7 @@ TEMPLATES = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
+AUTHENTICATION_BACKENDS = (
     'django_browserid.auth.BrowserIDBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
