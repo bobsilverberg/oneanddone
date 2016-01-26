@@ -34,6 +34,11 @@ from oneanddone.tasks.serializers import TaskSerializer
 from oneanddone.users.mixins import MyStaffUserRequiredMixin
 
 
+class AvailableTasksReactView(FilterView):
+    template_name = 'tasks/list_react.html'
+    filterset_class = TasksFilterSet
+
+
 class ActivityView(LoginRequiredMixin, MyStaffUserRequiredMixin, FilterView):
     list_headers = (
         (_lazy(u'Task'), 'task__name'),
@@ -558,12 +563,12 @@ class WhatsNextView(LoginRequiredMixin, generic.DetailView):
     template_name = 'tasks/whats_next.html'
 
 
-class TaskDetailAPI(APIOnlyCreatorMayDeleteMixin,
-                    generics.RetrieveUpdateDestroyAPIView):
+class TaskDetailAPI(generics.RetrieveAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
 
-class TaskListAPI(APIRecordCreatorMixin, generics.ListCreateAPIView):
+class TaskListAPI(APIRecordCreatorMixin, generics.ListAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    filter_class = TasksFilterSet

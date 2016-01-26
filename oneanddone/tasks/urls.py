@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^tasks/verification_list/$', views.TaskVerificationListView.as_view(),
         name='tasks.verification_list'),
     url(r'^tasks/available/$', views.AvailableTasksView.as_view(), name='tasks.available'),
+    url(r'^tasks/available-react/$', views.AvailableTasksReactView.as_view(), name='tasks.available_react'),
     url(r'^tasks/clone/(?P<clone>\d+)/$', views.CreateTaskView.as_view(), name='tasks.clone'),
     url(r'^tasks/create/$', views.CreateTaskView.as_view(), name='tasks.create'),
     url(r'^tasks/edit/(?P<pk>\d+)/$', views.UpdateTaskView.as_view(), name='tasks.edit'),

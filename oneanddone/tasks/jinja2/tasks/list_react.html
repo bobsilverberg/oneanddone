@@ -1,0 +1,193 @@
+{# This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/. #}
+{% extends 'base/base.html' %}
+
+{% set title = _('Tasks') %}
+
+{% block content %}
+<main class="billboard content-container">
+  <h1>{{ _('Tasks') }}</h1>
+
+  <div id="content"></div>
+
+  {% if user.is_staff %}
+    <nav class="actions-container">
+      <a href="{{ url('tasks.create') }}" class="button">{{ _('Create task') }}</a>
+    </nav>
+  {% endif %}
+
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+
+<script type="text/babel">
+  var TaskPage = React.createClass({
+    loadTasksFromServer: function() {
+      $.ajax({
+        url: this.props.url,
+        dataType: 'json',
+        cache: false,
+        data: this.state.filters,
+        traditional: true,
+        success: function(data) {
+          this.setState({data: data.results});
+        }.bind(this),
+        error: function(xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
+    },
+    getInitialState: function() {
+      return {data: [], filters: {search: '', execution_time: []}};
+    },
+    componentDidMount: function() {
+      this.loadTasksFromServer();
+    },
+    render: function() {
+      return (
+        <div className="taskPage">
+          <TaskFilters filters={this.state.filters} onFilterChange={this.loadTasksFromServer} />
+          <TaskList data={this.state.data} />
+        </div>
+      );
+    }
+  });
+
+  var TaskFilters = React.createClass({
+    handleSearchChange: function(e) {
+      this.props.filters.search = e.target.value;
+      this.props.onFilterChange();
+    },
+    handleETChange: function(e) {
+      var execution_time = this.props.filters.execution_time;
+      if (e.target.checked) {
+        execution_time.push(e.target.value);
+      } else {
+        execution_time.splice($.inArray(e.target.value, execution_time), 1);
+      }
+      this.props.onFilterChange();
+    },
+    render: function() {
+      return (
+        <div className="task-filters">
+          <form method="get" className="filters">
+            <fieldset>
+              <p>
+                <input type="text" id="search" placeholder="Search for tasks" onChange={this.handleSearchChange} />
+              </p>
+              <p>Estimated minutes to complete:</p>
+              <p>
+                <label htmlFor="ex_time_15">
+                  <input id="ex_time_15" value="15" type="checkbox" onClick={this.handleETChange}/> 15
+                </label>
+                <label htmlFor="ex_time_30">
+                  <input id="ex_time_30" value="30" type="checkbox" onClick={this.handleETChange} /> 30
+                </label>
+                <label htmlFor="ex_time_45">
+                  <input id="ex_time_45" value="45" type="checkbox" onClick={this.handleETChange}/> 45
+                </label>
+                <label htmlFor="ex_time_60">
+                  <input id="ex_time_60" value="60" type="checkbox" onClick={this.handleETChange}/> 60
+                </label>
+              </p>
+            </fieldset>
+          </form>
+        </div>
+      );
+    }
+  });
+
+  var TaskList = React.createClass({
+    render: function() {
+      var taskNodes = this.props.data.map(function(task) {
+        return (
+          <Task name={task.name}
+                short_description={task.short_description}
+                url={task.url}
+                edit_url={task.edit_url}
+                key={task.id}>
+            {task.short_description}
+          </Task>
+        );
+      });
+
+      return (
+        <div className="task-list-container">
+          <ol className="task-list">
+            {taskNodes}
+          </ol>
+        </div>
+      );
+    }
+  });
+
+{#  var CommentForm = React.createClass({#}
+{#    getInitialState: function() {#}
+{#      return {author: '', text: ''};#}
+{#    },#}
+{#    handleAuthorChange: function(e) {#}
+{#      this.setState({author: e.target.value});#}
+{#    },#}
+{#    handleTextChange: function(e) {#}
+{#      this.setState({text: e.target.value});#}
+{#    },#}
+{#    handleSubmit: function(e) {#}
+{#      e.preventDefault();#}
+{#      var author = this.state.author.trim();#}
+{#      var text = this.state.text.trim();#}
+{#      if (!text || !author) {#}
+{#        return;#}
+{#      }#}
+{#      this.props.onCommentSubmit({author: author, text: text});#}
+{#      this.setState({author: '', text: ''});#}
+{#    },#}
+{#    render: function() {#}
+{#      return (#}
+{#        <form className="commentForm" onSubmit={this.handleSubmit}>#}
+{#          <input type="text"#}
+{#            placeholder="Your name"#}
+{#            value={this.state.author}#}
+{#            onChange={this.handleAuthorChange}#}
+{#          />#}
+{#          <input type="text"#}
+{#            placeholder="Say something..."#}
+{#            value={this.state.text}#}
+{#            onChange={this.handleTextChange}#}
+{#          />#}
+{#          <input type="submit" value="Post" />#}
+{#        </form>#}
+{#      );#}
+{#    }#}
+{#  });#}
+
+  var Task = React.createClass({
+    render: function() {
+      return (
+        <li>
+          <p>
+            <a className="task-name" href={this.props.url}>{this.props.name}</a>
+{#            {% if user.is_staff %}#}
+              | <a className="edit-task" href={this.props.edit_url}>Edit</a>
+{#            {% endif %}#}
+          </p>
+          <p className="task-desc">{this.props.children.toString()}</p>
+        </li>
+      );
+    }
+  });
+
+  ReactDOM.render(
+      <TaskPage url="/api/v1/task" />,
+      document.getElementById('content')
+  );
+  // To get started with this tutorial running your own code, simply remove
+  // the script tag loading scripts/example.js and start writing code here.
+</script>
+
+{% endblock %}

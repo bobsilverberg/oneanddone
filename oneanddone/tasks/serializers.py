@@ -9,7 +9,7 @@ from oneanddone.tasks.models import (Task, TaskAttempt, TaskKeyword,
                                      TaskProject, TaskTeam, TaskType)
 
 
-class TaskAttemptSerializer(serializers.ModelSerializer):
+class TaskAttemptSerializer(serializers.HyperlinkedModelSerializer):
 
     user = serializers.SlugRelatedField(
         many=False,
@@ -21,19 +21,15 @@ class TaskAttemptSerializer(serializers.ModelSerializer):
         fields = ('user', 'state')
 
 
-class TaskKeywordSerializer(serializers.ModelSerializer):
+class TaskKeywordSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskKeyword
         fields = ('name',)
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
-    taskattempt_set = TaskAttemptSerializer(
-        many=True,
-        read_only=True,
-        required=False)
     keyword_set = TaskKeywordSerializer(
         many=True,
         read_only=True,
@@ -54,10 +50,12 @@ class TaskSerializer(serializers.ModelSerializer):
         many=False,
         queryset=User.objects.all(),
         slug_field='email')
+    url = serializers.CharField(source='get_absolute_url', read_only=True)
+    edit_url = serializers.CharField(source='get_edit_url', read_only=True)
 
     class Meta:
         model = Task
         fields = ('id', 'name', 'short_description', 'instructions', 'owner',
                   'prerequisites', 'execution_time', 'start_date', 'end_date',
                   'is_draft', 'is_invalid', 'project', 'team', 'type', 'repeatable',
-                  'difficulty', 'why_this_matters', 'keyword_set', 'taskattempt_set')
+                  'difficulty', 'why_this_matters', 'keyword_set', 'url', 'edit_url')
