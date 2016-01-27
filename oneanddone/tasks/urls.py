@@ -39,6 +39,9 @@ urlpatterns = [
 
     # API for interacting with tasks and task areas
     url(r'^api/v1/task/$', views.TaskListAPI.as_view(), name='api-task'),
+    url(r'^api/v1/taskproject/$', views.TaskProjectListAPI.as_view(), name='api-task-project'),
+    url(r'^api/v1/taskteam/$', views.TaskTeamListAPI.as_view(), name='api-task-team'),
+    url(r'^api/v1/tasktype/$', views.TaskTypeListAPI.as_view(), name='api-task-type'),
     url(r'^api/v1/task/(?P<pk>\d+)/$', views.TaskDetailAPI.as_view(),
         name='api-task-detail'),
 ]

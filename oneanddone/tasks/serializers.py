@@ -9,7 +9,7 @@ from oneanddone.tasks.models import (Task, TaskAttempt, TaskKeyword,
                                      TaskProject, TaskTeam, TaskType)
 
 
-class TaskAttemptSerializer(serializers.ModelSerializer):
+class TaskAttemptSerializer(serializers.HyperlinkedModelSerializer):
 
     user = serializers.SlugRelatedField(
         many=False,
@@ -21,19 +21,38 @@ class TaskAttemptSerializer(serializers.ModelSerializer):
         fields = ('user', 'state')
 
 
-class TaskKeywordSerializer(serializers.ModelSerializer):
+class TaskKeywordSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskKeyword
         fields = ('name',)
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskProjectSerializer(serializers.HyperlinkedModelSerializer):
 
-    taskattempt_set = TaskAttemptSerializer(
-        many=True,
-        read_only=True,
-        required=False)
+    class Meta:
+        model = TaskProject
+        fields = ('id', 'name',)
+
+
+class TaskTypeSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = TaskType
+        fields = ('id', 'name',)
+
+
+class TaskTeamSerializer(serializers.HyperlinkedModelSerializer):
+
+    url = serializers.CharField(source='get_absolute_url', read_only=True)
+
+    class Meta:
+        model = TaskTeam
+        fields = ('id', 'name', 'description', 'url')
+
+
+class TaskSerializer(serializers.HyperlinkedModelSerializer):
+
     keyword_set = TaskKeywordSerializer(
         many=True,
         read_only=True,
@@ -54,10 +73,18 @@ class TaskSerializer(serializers.ModelSerializer):
         many=False,
         queryset=User.objects.all(),
         slug_field='email')
+    url = serializers.CharField(source='get_absolute_url', read_only=True)
+    edit_url = serializers.SerializerMethodField('edit_url_if_staff')
 
     class Meta:
         model = Task
         fields = ('id', 'name', 'short_description', 'instructions', 'owner',
                   'prerequisites', 'execution_time', 'start_date', 'end_date',
                   'is_draft', 'is_invalid', 'project', 'team', 'type', 'repeatable',
-                  'difficulty', 'why_this_matters', 'keyword_set', 'taskattempt_set')
+                  'difficulty', 'why_this_matters', 'keyword_set', 'url', 'edit_url')
+
+    def edit_url_if_staff(self, obj):
+        user = self.context['request'].user
+        if user.is_staff:
+            return obj.get_edit_url()
+        return ''
