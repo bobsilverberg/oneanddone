@@ -29,8 +29,10 @@ from oneanddone.tasks.mixins import (APIOnlyCreatorMayDeleteMixin,
                                      HideNonRepeatableTaskMixin,
                                      TaskMustBeAvailableMixin)
 from oneanddone.tasks.models import (BugzillaBug, Feedback, Task, TaskAttempt,
-                                     TaskAttemptCommunication, TaskMetrics, TaskTeam)
-from oneanddone.tasks.serializers import TaskSerializer
+                                     TaskAttemptCommunication, TaskMetrics,
+                                     TaskProject, TaskTeam, TaskType)
+from oneanddone.tasks.serializers import (TaskSerializer, TaskProjectSerializer,
+                                          TaskTeamSerializer, TaskTypeSerializer)
 from oneanddone.users.mixins import MyStaffUserRequiredMixin
 
 
@@ -572,3 +574,18 @@ class TaskListAPI(APIRecordCreatorMixin, generics.ListAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     filter_class = TasksFilterSet
+
+
+class TaskProjectListAPI(generics.ListAPIView):
+    queryset = TaskProject.objects.all()
+    serializer_class = TaskProjectSerializer
+
+
+class TaskTeamListAPI(generics.ListAPIView):
+    queryset = TaskTeam.objects.all()
+    serializer_class = TaskTeamSerializer
+
+
+class TaskTypeListAPI(generics.ListAPIView):
+    queryset = TaskType.objects.all()
+    serializer_class = TaskTypeSerializer

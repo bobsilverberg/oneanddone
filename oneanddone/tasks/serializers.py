@@ -28,6 +28,29 @@ class TaskKeywordSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('name',)
 
 
+class TaskProjectSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = TaskProject
+        fields = ('id', 'name',)
+
+
+class TaskTypeSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = TaskType
+        fields = ('id', 'name',)
+
+
+class TaskTeamSerializer(serializers.HyperlinkedModelSerializer):
+
+    url = serializers.CharField(source='get_absolute_url', read_only=True)
+
+    class Meta:
+        model = TaskTeam
+        fields = ('id', 'name', 'description', 'url')
+
+
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
     keyword_set = TaskKeywordSerializer(

@@ -43,16 +43,52 @@
         }.bind(this)
       });
     },
+    loadTeamsFromServer: function() {
+      $.ajax({
+        url: this.props.team_url,
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+          this.setState({teams: data.results});
+        }.bind(this),
+        error: function(xhr, status, err) {
+          console.error(this.props.team_url, status, err.toString());
+        }.bind(this)
+      });
+    },
+    loadProjectsFromServer: function() {
+      $.ajax({
+        url: this.props.project_url,
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+          this.setState({projects: data.results});
+        }.bind(this),
+        error: function(xhr, status, err) {
+          console.error(this.props.project_url, status, err.toString());
+        }.bind(this)
+      });
+    },
     getInitialState: function() {
-      return {data: [], filters: {search: '', execution_time: []}};
+      return {
+        data: [],
+        filters: {search: '', execution_time: [], team: []},
+        teams: [],
+        projects: []
+      };
     },
     componentDidMount: function() {
       this.loadTasksFromServer();
+      this.loadTeamsFromServer();
+      this.loadProjectsFromServer();
     },
     render: function() {
       return (
         <div className="taskPage">
-          <TaskFilters filters={this.state.filters} onFilterChange={this.loadTasksFromServer} />
+          <TaskFilters filters={this.state.filters}
+                       onFilterChange={this.loadTasksFromServer}
+                       teams={this.state.teams}
+                       projects={this.state.projects}/>
           <TaskList data={this.state.data} />
         </div>
       );
@@ -64,41 +100,156 @@
       this.props.filters.search = e.target.value;
       this.props.onFilterChange();
     },
-    handleETChange: function(e) {
-      var execution_time = this.props.filters.execution_time;
-      if (e.target.checked) {
-        execution_time.push(e.target.value);
-      } else {
-        execution_time.splice($.inArray(e.target.value, execution_time), 1);
-      }
-      this.props.onFilterChange();
-    },
     render: function() {
       return (
         <div className="task-filters">
           <form method="get" className="filters">
             <fieldset>
-              <p>
-                <input type="text" id="search" placeholder="Search for tasks" onChange={this.handleSearchChange} />
-              </p>
-              <p>Estimated minutes to complete:</p>
-              <p>
-                <label htmlFor="ex_time_15">
-                  <input id="ex_time_15" value="15" type="checkbox" onClick={this.handleETChange}/> 15
-                </label>
-                <label htmlFor="ex_time_30">
-                  <input id="ex_time_30" value="30" type="checkbox" onClick={this.handleETChange} /> 30
-                </label>
-                <label htmlFor="ex_time_45">
-                  <input id="ex_time_45" value="45" type="checkbox" onClick={this.handleETChange}/> 45
-                </label>
-                <label htmlFor="ex_time_60">
-                  <input id="ex_time_60" value="60" type="checkbox" onClick={this.handleETChange}/> 60
-                </label>
-              </p>
+              <SearchFilter {...this.props} />
+              <ETFilter {...this.props} />
+              <TeamFilter {...this.props} />
+              <ProjectFilter {...this.props} />
             </fieldset>
           </form>
         </div>
+      );
+    }
+  });
+
+  var SearchFilter = React.createClass({
+    handleChange: function(e) {
+      this.props.filters.search = e.target.value;
+      this.props.onFilterChange();
+    },
+    render: function() {
+      return (
+        <p>
+          <input type="text" id="search" placeholder="Search for tasks" onChange={this.handleChange} />
+        </p>
+      );
+    }
+  });
+
+  var ETFilter = React.createClass({
+    render: function() {
+      var etNodes = [15, 30, 45, 60].map(function(executionTime) {
+        return (
+          <ET executionTime={executionTime}
+              key={executionTime}
+              {...this.props} />
+        );
+      }, this);
+      return (
+        <div className="et-filter">
+          <p>Estimated minutes to complete:</p>
+          <p>
+            {etNodes}
+          </p>
+        </div>
+      );
+    }
+  });
+
+  var ET = React.createClass({
+    handleChange: function(e) {
+      var executionTime = this.props.filters.execution_time;
+      if (e.target.checked) {
+        executionTime.push(e.target.value);
+      } else {
+        executionTime.splice($.inArray(e.target.value, executionTime), 1);
+      }
+      this.props.onFilterChange();
+    },
+    render: function() {
+      var etId = 'et' + this.props.executionTime;
+      return (
+        <label htmlFor={etId}>
+          <input id={etId} value={this.props.executionTime} type="checkbox" onClick={this.handleChange} />
+          {this.props.executionTime}
+        </label>
+      );
+    }
+  });
+
+  var TeamFilter = React.createClass({
+    render: function () {
+      var teamNodes = this.props.teams.map(function(team) {
+        return (
+          <Team id={team.id}
+                name={team.name}
+                url={team.url}
+                key={team.id}
+                {...this.props} />
+        );
+      }, this);
+      return (
+        <ul>
+          {teamNodes}
+        </ul>
+      );
+    }
+  });
+
+  var Team = React.createClass({
+    handleChange: function(e) {
+      var team = this.props.filters.team;
+      if (e.target.checked) {
+        team.push(e.target.value);
+      } else {
+        team.splice($.inArray(e.target.value, team), 1);
+      }
+      this.props.onFilterChange();
+    },
+    render: function() {
+      var teamId = 'team' + this.props.id;
+      return (
+        <li>
+          <label htmlFor={teamId}>
+            <input id={teamId} value={this.props.id} type="checkbox" onClick={this.handleChange} />
+            {this.props.name}
+          </label>
+        </li>
+      );
+    }
+  });
+
+  var ProjectFilter = React.createClass({
+    render: function () {
+      var projectNodes = this.props.projects.map(function(project) {
+        return (
+          <Project id={project.id}
+                name={project.name}
+                key={project.id}
+                {...this.props} />
+        );
+      }, this);
+      return (
+        <ul>
+          {projectNodes}
+        </ul>
+      );
+    }
+  });
+
+  var Project = React.createClass({
+    handleChange: function(e) {
+      var project = this.props.filters.project;
+      if (e.target.checked) {
+        project.push(e.target.value);
+      } else {
+        project.splice($.inArray(e.target.value, project), 1);
+      }
+      this.props.onFilterChange();
+    },
+    render: function() {
+      var projectId = 'project' + this.props.id;
+      return (
+        <li>
+          <label htmlFor={projectId}>
+            <input id={projectId} value={this.props.id} type="checkbox" onClick={this.handleChange} />
+            {this.props.name}
+          </label>
+        </li>
       );
     }
   });
@@ -127,45 +278,6 @@
     }
   });
 
-{#  var CommentForm = React.createClass({#}
-{#    getInitialState: function() {#}
-{#      return {author: '', text: ''};#}
-{#    },#}
-{#    handleAuthorChange: function(e) {#}
-{#      this.setState({author: e.target.value});#}
-{#    },#}
-{#    handleTextChange: function(e) {#}
-{#      this.setState({text: e.target.value});#}
-{#    },#}
-{#    handleSubmit: function(e) {#}
-{#      e.preventDefault();#}
-{#      var author = this.state.author.trim();#}
-{#      var text = this.state.text.trim();#}
-{#      if (!text || !author) {#}
-{#        return;#}
-{#      }#}
-{#      this.props.onCommentSubmit({author: author, text: text});#}
-{#      this.setState({author: '', text: ''});#}
-{#    },#}
-{#    render: function() {#}
-{#      return (#}
-{#        <form className="commentForm" onSubmit={this.handleSubmit}>#}
-{#          <input type="text"#}
-{#            placeholder="Your name"#}
-{#            value={this.state.author}#}
-{#            onChange={this.handleAuthorChange}#}
-{#          />#}
-{#          <input type="text"#}
-{#            placeholder="Say something..."#}
-{#            value={this.state.text}#}
-{#            onChange={this.handleTextChange}#}
-{#          />#}
-{#          <input type="submit" value="Post" />#}
-{#        </form>#}
-{#      );#}
-{#    }#}
-{#  });#}
-
   var Task = React.createClass({
     render: function() {
       return (
@@ -183,7 +295,7 @@
   });
 
   ReactDOM.render(
-      <TaskPage url="/api/v1/task" />,
+      <TaskPage url="/api/v1/task" team_url="/api/v1/taskteam" project_url="/api/v1/taskproject" />,
       document.getElementById('content')
   );
   // To get started with this tutorial running your own code, simply remove
