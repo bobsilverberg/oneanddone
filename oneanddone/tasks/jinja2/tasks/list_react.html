@@ -1,0 +1,31 @@
+{# This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/. #}
+{% extends 'base/base.html' %}
+
+{% set title = _('Tasks') %}
+
+{% block content %}
+<main class="billboard content-container">
+  <h1>{{ _('Tasks') }}</h1>
+
+  <div id="content"></div>
+
+  {% if user.is_staff %}
+    <nav class="actions-container">
+      <a href="{{ url('tasks.create') }}" class="button">{{ _('Create task') }}</a>
+    </nav>
+  {% endif %}
+
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+<script type="text/babel" src="/static/js/tasklist.js"></script>
+
+
+{% endblock %}

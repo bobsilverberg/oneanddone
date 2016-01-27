@@ -22,9 +22,7 @@ from oneanddone.tasks.forms import (FeedbackForm, SubmitVerifiedTaskForm,
                                     TaskImportBatchForm,
                                     TaskInvalidCriteriaFormSet, TaskForm,
                                     TeamForm)
-from oneanddone.tasks.mixins import (APIOnlyCreatorMayDeleteMixin,
-                                     APIRecordCreatorMixin,
-                                     BaseURLMixin,
+from oneanddone.tasks.mixins import (BaseURLMixin,
                                      GetUserAttemptForFeedbackMixin,
                                      HideNonRepeatableTaskMixin,
                                      TaskMustBeAvailableMixin)
@@ -34,6 +32,11 @@ from oneanddone.tasks.models import (BugzillaBug, Feedback, Task, TaskAttempt,
 from oneanddone.tasks.serializers import (TaskSerializer, TaskProjectSerializer,
                                           TaskTeamSerializer, TaskTypeSerializer)
 from oneanddone.users.mixins import MyStaffUserRequiredMixin
+
+
+class AvailableTasksReactView(FilterView):
+    template_name = 'tasks/list_react.html'
+    filterset_class = TasksFilterSet
 
 
 class ActivityView(LoginRequiredMixin, MyStaffUserRequiredMixin, FilterView):
@@ -565,7 +568,7 @@ class TaskDetailAPI(generics.RetrieveAPIView):
     serializer_class = TaskSerializer
 
 
-class TaskListAPI(APIRecordCreatorMixin, generics.ListAPIView):
+class TaskListAPI(generics.ListAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     filter_class = TasksFilterSet
@@ -574,13 +577,16 @@ class TaskListAPI(APIRecordCreatorMixin, generics.ListAPIView):
 class TaskProjectListAPI(generics.ListAPIView):
     queryset = TaskProject.objects.all()
     serializer_class = TaskProjectSerializer
+    pagination_class = None
 
 
 class TaskTeamListAPI(generics.ListAPIView):
     queryset = TaskTeam.objects.all()
     serializer_class = TaskTeamSerializer
+    pagination_class = None
 
 
 class TaskTypeListAPI(generics.ListAPIView):
     queryset = TaskType.objects.all()
     serializer_class = TaskTypeSerializer
+    pagination_class = None
