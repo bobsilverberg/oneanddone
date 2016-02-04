@@ -25,6 +25,7 @@ from oneanddone.tasks.forms import (FeedbackForm, SubmitVerifiedTaskForm,
 from oneanddone.tasks.mixins import (BaseURLMixin,
                                      GetUserAttemptForFeedbackMixin,
                                      HideNonRepeatableTaskMixin,
+                                     MustHaveAvailableTasksMixin,
                                      TaskMustBeAvailableMixin)
 from oneanddone.tasks.models import (BugzillaBug, Feedback, Task, TaskAttempt,
                                      TaskAttemptCommunication, TaskMetrics,
@@ -568,25 +569,25 @@ class TaskDetailAPI(generics.RetrieveAPIView):
     serializer_class = TaskSerializer
 
 
-class TaskListAPI(generics.ListAPIView):
+class TaskListAPI(TaskMustBeAvailableMixin, generics.ListAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     filter_class = TasksFilterSet
 
 
-class TaskProjectListAPI(generics.ListAPIView):
+class TaskProjectListAPI(MustHaveAvailableTasksMixin, generics.ListAPIView):
     queryset = TaskProject.objects.all()
     serializer_class = TaskProjectSerializer
     pagination_class = None
 
 
-class TaskTeamListAPI(generics.ListAPIView):
+class TaskTeamListAPI(MustHaveAvailableTasksMixin, generics.ListAPIView):
     queryset = TaskTeam.objects.all()
     serializer_class = TaskTeamSerializer
     pagination_class = None
 
 
-class TaskTypeListAPI(generics.ListAPIView):
+class TaskTypeListAPI(MustHaveAvailableTasksMixin, generics.ListAPIView):
     queryset = TaskType.objects.all()
     serializer_class = TaskTypeSerializer
     pagination_class = None

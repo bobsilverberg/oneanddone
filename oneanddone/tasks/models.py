@@ -360,6 +360,9 @@ class TaskProject(CreatedModifiedModel, CreatedByModel):
     def __unicode__(self):
         return self.name
 
+    class Meta(CreatedModifiedModel.Meta):
+        ordering = ('name',)
+
 
 class TaskTeam(CreatedModifiedModel, CreatedByModel):
     description = models.TextField(blank=True)
@@ -396,12 +399,18 @@ class TaskTeam(CreatedModifiedModel, CreatedByModel):
         except (TaskTeam.DoesNotExist, MultipleObjectsReturned):
             raise Http404(_(u'No team found matching the url suffix'))
 
+    class Meta(CreatedModifiedModel.Meta):
+        ordering = ('name',)
+
 
 class TaskType(CreatedModifiedModel, CreatedByModel):
     name = models.CharField(max_length=255)
 
     def __unicode__(self):
         return self.name
+
+    class Meta(CreatedModifiedModel.Meta):
+        ordering = ('name',)
 
 
 class Task(CreatedModifiedModel, CreatedByModel):

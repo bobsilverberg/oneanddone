@@ -179,7 +179,7 @@ let ET = React.createClass({
 let TeamFilter = React.createClass({
   getInitialState: function() {
     return {
-      expanded: false
+      expanded: true
     }
   },
   handleToggle: function(e) {
@@ -235,7 +235,7 @@ let Team = React.createClass({
 let ProjectFilter = React.createClass({
   getInitialState: function() {
     return {
-      expanded: false
+      expanded: true
     }
   },
   handleToggle: function(e) {
@@ -290,7 +290,7 @@ let Project = React.createClass({
 let TypeFilter = React.createClass({
   getInitialState: function() {
     return {
-      expanded: false
+      expanded: true
     }
   },
   handleToggle: function(e) {

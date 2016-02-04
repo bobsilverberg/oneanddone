@@ -67,3 +67,14 @@ class TaskMustBeAvailableMixin(object):
     def get_queryset(self):
         queryset = super(TaskMustBeAvailableMixin, self).get_queryset()
         return queryset.filter(Task.is_available_filter(allow_expired=self.allow_expired_tasks))
+
+
+class MustHaveAvailableTasksMixin(object):
+    """
+    Only return objects that have available tasks associated with them.
+    """
+    allow_expired_tasks = False
+
+    def get_queryset(self):
+        queryset = super(MustHaveAvailableTasksMixin, self).get_queryset()
+        return queryset.filter(task__in=Task.objects.filter(Task.is_available_filter()))
