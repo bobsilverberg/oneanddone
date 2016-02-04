@@ -7,8 +7,7 @@
     "type": "git",
     "url": "git://github.com/mozilla/oneanddone.git"
   },
-  "devDependencies": {
-    "bower": "^1.7.7",
+  "dependencies": {
     "less": "^2.5.3",
     "yuglify": "^0.1.4"
   }
